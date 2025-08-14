@@ -3,8 +3,6 @@
 echo "🖥️ FIXING DESKTOP-FIRST DESIGN - PROPER DESKTOP EXPERIENCE"
 echo "Creating beautiful desktop interface with option to disable mobile entirely..."
 
-cd mission-tracker
-
 echo "📦 Creating backup..."
 cp -r frontend/src frontend/src.backup-desktop-fix
 
