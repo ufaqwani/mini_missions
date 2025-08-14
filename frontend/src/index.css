@@ -68,3 +68,278 @@
   background-color: #f59e0b;
   color: white;
 }
+
+/* Mobile-First Responsive Design */
+* {
+  box-sizing: border-box;
+}
+
+/* Base mobile styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile input improvements */
+input, select, textarea, button {
+  font-size: 16px !important; /* Prevents zoom on iOS */
+  border-radius: 8px;
+  border: 2px solid #e1e5e9;
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+button {
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  min-height: 44px; /* Apple's recommended touch target size */
+}
+
+button:hover, button:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Mobile navigation styles */
+.mobile-nav {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mobile-nav button {
+  flex: 1;
+  margin: 0;
+  border-radius: 0;
+  border-right: none;
+  font-size: 14px;
+  padding: 12px 8px;
+}
+
+.mobile-nav button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.mobile-nav button:last-child {
+  border-radius: 0 8px 8px 0;
+  border-right: 2px solid #007bff;
+}
+
+/* Mobile form improvements */
+.mobile-form {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.mobile-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.mobile-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-input-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Mobile cards */
+.mobile-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e1e5e9;
+}
+
+/* Mobile task items */
+.mobile-task {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-left: 4px solid;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.mobile-task-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.mobile-task-content {
+  flex: 1;
+  min-width: 0; /* Prevents text overflow */
+}
+
+.mobile-task-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.mobile-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.mobile-badge {
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Mobile header */
+.mobile-header {
+  background: #007bff;
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mobile-header h1 {
+  font-size: 20px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.mobile-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mobile-header-user span {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.mobile-header-user button {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 12px;
+  font-size: 14px;
+  min-height: auto;
+}
+
+/* Mobile layouts */
+.mobile-layout {
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.mobile-content {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mobile-two-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  .mobile-content {
+    padding: 20px;
+  }
+  
+  .mobile-two-column {
+    flex-direction: row;
+  }
+  
+  .mobile-two-column > div {
+    flex: 1;
+  }
+  
+  .mobile-form-row {
+    flex-direction: row;
+    align-items: end;
+  }
+  
+  .mobile-form-row > div:first-child {
+    flex: 2;
+  }
+  
+  .mobile-nav {
+    max-width: 400px;
+    margin: 0 auto 20px auto;
+  }
+}
+
+/* Desktop optimization */
+@media (min-width: 1024px) {
+  .mobile-layout {
+    background-color: #f5f7fa;
+  }
+  
+  .mobile-content {
+    max-width: 1400px;
+    padding: 30px;
+  }
+}
+
+/* Hide desktop-only content on mobile */
+@media (max-width: 767px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Mobile-specific utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+
+/* Touch-friendly checkboxes */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}

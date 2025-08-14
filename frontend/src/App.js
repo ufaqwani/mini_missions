@@ -162,79 +162,44 @@ function App() {
   // Show loading screen while data is loading
   if (loading) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f7fa'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ color: '#333' }}>🎯 Mission Tracker</h2>
-          <p style={{ color: '#666' }}>Loading your missions...</p>
+      <div className="mobile-layout">
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <h2 style={{ color: '#333', margin: '0 0 8px 0' }}>🎯 Mission Tracker</h2>
+            <p style={{ color: '#666', margin: '0' }}>Loading your missions...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Top Navigation Bar */}
-      <div style={{
-        backgroundColor: '#007bff',
-        color: 'white',
-        padding: '15px 20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-        <h1 style={{ margin: 0, fontSize: '24px' }}>🎯 Mission Tracker</h1>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <span style={{ fontSize: '14px', opacity: '0.9' }}>
-            Welcome, <strong>{currentUser}</strong>!
-          </span>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.3)',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              transition: 'background-color 0.3s'
-            }}
-          >
+    <div className="mobile-layout">
+      {/* Mobile-friendly Header */}
+      <div className="mobile-header">
+        <h1>🎯 Mission Tracker</h1>
+        <div className="mobile-header-user">
+          <span>Welcome, <strong>{currentUser}</strong>!</span>
+          <button onClick={handleLogout}>
             Logout
           </button>
         </div>
       </div>
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px' }}>
-        {/* Navigation */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          marginBottom: '20px',
-          backgroundColor: 'white',
-          padding: '10px',
-          borderRadius: '8px',
-          border: '1px solid #ddd'
-        }}>
+      <div className="mobile-content">
+        {/* Mobile Navigation */}
+        <div className="mobile-nav">
           <button
             onClick={() => setCurrentView('today')}
             style={{
               backgroundColor: currentView === 'today' ? '#007bff' : 'transparent',
               color: currentView === 'today' ? 'white' : '#666',
-              border: '1px solid #007bff',
-              padding: '10px 20px',
-              borderRadius: '6px 0 0 6px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: 'bold'
+              border: '2px solid #007bff'
             }}
           >
             🎯 Today's Focus
@@ -244,13 +209,7 @@ function App() {
             style={{
               backgroundColor: currentView === 'missions' ? '#007bff' : 'transparent',
               color: currentView === 'missions' ? 'white' : '#666',
-              border: '1px solid #007bff',
-              borderLeft: 'none',
-              padding: '10px 20px',
-              borderRadius: '0 6px 6px 0',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: 'bold'
+              border: '2px solid #007bff'
             }}
           >
             📋 Manage Missions
@@ -261,14 +220,18 @@ function App() {
           <TodayDashboard missions={missions} onRefresh={refreshData} />
         ) : (
           <>
-            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-              <h1 style={{ color: '#333', margin: '0 0 10px 0' }}>📋 Mission Management</h1>
-              <p style={{ color: '#666', margin: '0' }}>Organize your long-term goals and create daily missions</p>
+            <div className="mobile-card text-center">
+              <h1 style={{ color: '#333', margin: '0 0 8px 0', fontSize: '24px' }}>
+                📋 Mission Management
+              </h1>
+              <p style={{ color: '#666', margin: '0', fontSize: '16px' }}>
+                Organize your long-term goals and create daily missions
+              </p>
             </div>
             
-            <div style={{ display: 'flex', gap: '30px' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ marginBottom: '20px' }}>
+            <div className="mobile-two-column">
+              <div>
+                <div className="mobile-card">
                   <button
                     onClick={() => {
                       setShowMissionForm(!showMissionForm);
@@ -277,62 +240,64 @@ function App() {
                     style={{
                       backgroundColor: '#007bff',
                       color: 'white',
-                      padding: '10px 20px',
+                      padding: '12px 20px',
                       border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '16px'
+                      borderRadius: '8px',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      marginBottom: '16px',
+                      width: '100%'
                     }}
                   >
                     {showMissionForm ? 'Cancel' : '+ New Mission'}
                   </button>
-                </div>
 
-                {showMissionForm && (
-                  <MissionForm
-                    onSubmit={editingMission ? handleUpdateMission : handleCreateMission}
-                    mission={editingMission}
-                    onCancel={() => {
-                      setShowMissionForm(false);
-                      setEditingMission(null);
+                  {showMissionForm && (
+                    <MissionForm
+                      onSubmit={editingMission ? handleUpdateMission : handleCreateMission}
+                      mission={editingMission}
+                      onCancel={() => {
+                        setShowMissionForm(false);
+                        setEditingMission(null);
+                      }}
+                    />
+                  )}
+
+                  <MissionList
+                    missions={missions}
+                    selectedMissionId={selectedMissionId}
+                    onSelectMission={setSelectedMissionId}
+                    onEdit={(mission) => {
+                      setEditingMission(mission);
+                      setShowMissionForm(true);
                     }}
+                    onDelete={handleDeleteMission}
                   />
-                )}
-
-                <MissionList
-                  missions={missions}
-                  selectedMissionId={selectedMissionId}
-                  onSelectMission={setSelectedMissionId}
-                  onEdit={(mission) => {
-                    setEditingMission(mission);
-                    setShowMissionForm(true);
-                  }}
-                  onDelete={handleDeleteMission}
-                />
+                </div>
               </div>
 
-              <div style={{ flex: 1 }}>
+              <div>
                 {selectedMissionId ? (
-                  <>
-                    <div style={{ marginBottom: '20px' }}>
-                      <button
-                        onClick={() => {
-                          setShowDailyMissionForm(!showDailyMissionForm);
-                          setEditingDailyMission(null);
-                        }}
-                        style={{
-                          backgroundColor: '#28a745',
-                          color: 'white',
-                          padding: '10px 20px',
-                          border: 'none',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          fontSize: '16px'
-                        }}
-                      >
-                        {showDailyMissionForm ? 'Cancel' : '+ New Daily Mission'}
-                      </button>
-                    </div>
+                  <div className="mobile-card">
+                    <button
+                      onClick={() => {
+                        setShowDailyMissionForm(!showDailyMissionForm);
+                        setEditingDailyMission(null);
+                      }}
+                      style={{
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        padding: '12px 20px',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        marginBottom: '16px',
+                        width: '100%'
+                      }}
+                    >
+                      {showDailyMissionForm ? 'Cancel' : '+ New Daily Mission'}
+                    </button>
 
                     {showDailyMissionForm && (
                       <DailyMissionForm
@@ -346,28 +311,24 @@ function App() {
                       />
                     )}
 
-                    <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
-                      <DailyMissionList
-                        dailyMissions={dailyMissions}
-                        onEdit={(dailyMission) => {
-                          setEditingDailyMission(dailyMission);
-                          setShowDailyMissionForm(true);
-                        }}
-                        onDelete={handleDeleteDailyMission}
-                        onToggleComplete={handleToggleComplete}
-                      />
-                    </div>
-                  </>
+                    <DailyMissionList
+                      dailyMissions={dailyMissions}
+                      onEdit={(dailyMission) => {
+                        setEditingDailyMission(dailyMission);
+                        setShowDailyMissionForm(true);
+                      }}
+                      onDelete={handleDeleteDailyMission}
+                      onToggleComplete={handleToggleComplete}
+                    />
+                  </div>
                 ) : (
-                  <div style={{ 
-                    backgroundColor: 'white', 
-                    padding: '40px', 
-                    borderRadius: '8px', 
-                    textAlign: 'center',
-                    color: '#666'
-                  }}>
-                    <h3>Select a mission to manage daily missions</h3>
-                    <p>Click on a mission from the left panel to start managing daily missions.</p>
+                  <div className="mobile-card text-center">
+                    <h3 style={{ color: '#666', margin: '0 0 8px 0' }}>
+                      Select a mission to manage daily missions
+                    </h3>
+                    <p style={{ color: '#999', margin: '0', fontSize: '14px' }}>
+                      Click on a mission from the left panel to start managing daily missions.
+                    </p>
                   </div>
                 )}
               </div>
