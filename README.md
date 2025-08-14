@@ -5,7 +5,6 @@ A modern, multi-user task management application focused on daily goal completio
 ## ✨ Features
 
 - **🔐 3-User Authentication System**
-  - Pre-configured users: `ufaq`, `zia`, `sweta`
   - Secure login with isolated user data
   
 - **🎯 Today's Focus Dashboard**
