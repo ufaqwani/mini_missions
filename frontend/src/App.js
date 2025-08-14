@@ -162,15 +162,10 @@ function App() {
   // Show loading screen while data is loading
   if (loading) {
     return (
-      <div className="mobile-layout">
-        <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
+      <div className="app-container">
+        <div className="loading">
           <div style={{ textAlign: 'center' }}>
-            <h2 style={{ color: '#333', margin: '0 0 8px 0' }}>🎯 Mission Tracker</h2>
+            <h2 style={{ color: '#333', margin: '0 0 10px 0' }}>🎯 Mission Tracker</h2>
             <p style={{ color: '#666', margin: '0' }}>Loading your missions...</p>
           </div>
         </div>
@@ -179,11 +174,11 @@ function App() {
   }
 
   return (
-    <div className="mobile-layout">
-      {/* Mobile-friendly Header */}
-      <div className="mobile-header">
+    <div className="app-container">
+      {/* Desktop Header */}
+      <div className="header">
         <h1>🎯 Mission Tracker</h1>
-        <div className="mobile-header-user">
+        <div className="header-user">
           <span>Welcome, <strong>{currentUser}</strong>!</span>
           <button onClick={handleLogout}>
             Logout
@@ -191,26 +186,18 @@ function App() {
         </div>
       </div>
 
-      <div className="mobile-content">
-        {/* Mobile Navigation */}
-        <div className="mobile-nav">
+      <div className="main-content">
+        {/* Desktop Navigation */}
+        <div className="navigation">
           <button
             onClick={() => setCurrentView('today')}
-            style={{
-              backgroundColor: currentView === 'today' ? '#007bff' : 'transparent',
-              color: currentView === 'today' ? 'white' : '#666',
-              border: '2px solid #007bff'
-            }}
+            className={`nav-button ${currentView === 'today' ? 'active' : ''}`}
           >
             🎯 Today's Focus
           </button>
           <button
             onClick={() => setCurrentView('missions')}
-            style={{
-              backgroundColor: currentView === 'missions' ? '#007bff' : 'transparent',
-              color: currentView === 'missions' ? 'white' : '#666',
-              border: '2px solid #007bff'
-            }}
+            className={`nav-button ${currentView === 'missions' ? 'active' : ''}`}
           >
             📋 Manage Missions
           </button>
@@ -220,8 +207,8 @@ function App() {
           <TodayDashboard missions={missions} onRefresh={refreshData} />
         ) : (
           <>
-            <div className="mobile-card text-center">
-              <h1 style={{ color: '#333', margin: '0 0 8px 0', fontSize: '24px' }}>
+            <div className="card text-center">
+              <h1 style={{ color: '#333', margin: '0 0 10px 0', fontSize: '28px' }}>
                 📋 Mission Management
               </h1>
               <p style={{ color: '#666', margin: '0', fontSize: '16px' }}>
@@ -229,25 +216,16 @@ function App() {
               </p>
             </div>
             
-            <div className="mobile-two-column">
+            <div className="two-column">
               <div>
-                <div className="mobile-card">
+                <div className="card">
                   <button
                     onClick={() => {
                       setShowMissionForm(!showMissionForm);
                       setEditingMission(null);
                     }}
-                    style={{
-                      backgroundColor: '#007bff',
-                      color: 'white',
-                      padding: '12px 20px',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      marginBottom: '16px',
-                      width: '100%'
-                    }}
+                    className="btn btn-primary btn-lg"
+                    style={{ marginBottom: '20px', width: '100%' }}
                   >
                     {showMissionForm ? 'Cancel' : '+ New Mission'}
                   </button>
@@ -278,23 +256,14 @@ function App() {
 
               <div>
                 {selectedMissionId ? (
-                  <div className="mobile-card">
+                  <div className="card">
                     <button
                       onClick={() => {
                         setShowDailyMissionForm(!showDailyMissionForm);
                         setEditingDailyMission(null);
                       }}
-                      style={{
-                        backgroundColor: '#28a745',
-                        color: 'white',
-                        padding: '12px 20px',
-                        border: 'none',
-                        borderRadius: '8px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        marginBottom: '16px',
-                        width: '100%'
-                      }}
+                      className="btn btn-success btn-lg"
+                      style={{ marginBottom: '20px', width: '100%' }}
                     >
                       {showDailyMissionForm ? 'Cancel' : '+ New Daily Mission'}
                     </button>
@@ -322,11 +291,11 @@ function App() {
                     />
                   </div>
                 ) : (
-                  <div className="mobile-card text-center">
-                    <h3 style={{ color: '#666', margin: '0 0 8px 0' }}>
+                  <div className="card text-center">
+                    <h3 style={{ color: '#666', margin: '0 0 10px 0' }}>
                       Select a mission to manage daily missions
                     </h3>
-                    <p style={{ color: '#999', margin: '0', fontSize: '14px' }}>
+                    <p style={{ color: '#999', margin: '0' }}>
                       Click on a mission from the left panel to start managing daily missions.
                     </p>
                   </div>

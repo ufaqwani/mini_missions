@@ -68,8 +68,6 @@ const TodayDashboard = ({ missions, onRefresh }) => {
         setQuickAddTitle('');
         await loadTodayData();
         onRefresh();
-      } else {
-        console.error('Failed to add quick mission');
       }
     } catch (error) {
       console.error('Error adding quick mission:', error);
@@ -90,13 +88,9 @@ const TodayDashboard = ({ missions, onRefresh }) => {
       });
       
       await loadTodayData();
-      
-      if (onRefresh) {
-        onRefresh();
-      }
+      if (onRefresh) onRefresh();
     } catch (error) {
       console.error('Error updating mission:', error);
-      alert('Failed to update mission. Please try again.');
     }
   };
 
@@ -151,8 +145,8 @@ const TodayDashboard = ({ missions, onRefresh }) => {
 
   if (loading) {
     return (
-      <div className="mobile-card">
-        <p style={{ textAlign: 'center', margin: '20px 0' }}>Loading today's goals...</p>
+      <div className="loading">
+        <p>Loading today's goals...</p>
       </div>
     );
   }
@@ -160,91 +154,56 @@ const TodayDashboard = ({ missions, onRefresh }) => {
   const priorityStats = getPriorityStats();
 
   return (
-    <div>
-      {/* Mobile-friendly Header */}
-      <div className="mobile-card" style={{ 
-        background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '700' }}>
-          🎯 Today's Focus
-        </h1>
-        <p style={{ margin: '0 0 16px 0', fontSize: '14px', opacity: '0.9' }}>
-          {getTodayDate()}
-        </p>
+    <div className="fade-in">
+      {/* Desktop Header */}
+      <div className="today-header">
+        <h1>🎯 Today's Focus</h1>
+        <p>{getTodayDate()}</p>
         
-        {/* Progress Bar */}
-        <div style={{ 
-          backgroundColor: 'rgba(255,255,255,0.2)', 
-          borderRadius: '10px', 
-          height: '8px', 
-          marginBottom: '12px',
-          overflow: 'hidden'
-        }}>
-          <div style={{ 
-            backgroundColor: '#28a745', 
-            height: '100%', 
-            borderRadius: '10px',
-            width: `${getProgressPercentage()}%`,
-            transition: 'width 0.3s ease'
-          }}></div>
+        <div className="progress-bar">
+          <div 
+            className="progress-fill" 
+            style={{ width: `${getProgressPercentage()}%` }}
+          ></div>
         </div>
         
-        {/* Mobile Stats */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          flexWrap: 'wrap',
-          gap: '12px', 
-          marginBottom: '12px', 
-          fontSize: '13px' 
-        }}>
-          <span>🔴 {priorityStats.high}</span>
-          <span>🟡 {priorityStats.medium}</span>
-          <span>🟢 {priorityStats.low}</span>
+        <div className="stats">
+          <span>🔴 {priorityStats.high} High</span>
+          <span>🟡 {priorityStats.medium} Medium</span>
+          <span>🟢 {priorityStats.low} Low</span>
           {priorityStats.overdue > 0 && (
-            <span style={{ fontWeight: 'bold' }}>
+            <span className="pulse" style={{ fontWeight: 'bold' }}>
               {priorityStats.critical > 0 ? '🚨' : '⚠️'} {priorityStats.overdue} Overdue
             </span>
           )}
         </div>
         
-        <p style={{ margin: '0', fontSize: '14px', opacity: '0.9' }}>
+        <p style={{ fontSize: '16px', opacity: '0.9', margin: '10px 0 0 0' }}>
           {completedToday.length} completed • {todayMissions.length} remaining • {getProgressPercentage()}% done
         </p>
       </div>
 
-      {/* Mobile Quick Add */}
-      <div className="mobile-card">
-        <h3 style={{ margin: '0 0 16px 0', color: '#333', fontSize: '18px' }}>
-          ⚡ Quick Add Today's Goal
-        </h3>
+      {/* Quick Add Form */}
+      <div className="card">
+        <h3 style={{ margin: '0 0 20px 0', fontSize: '20px' }}>⚡ Quick Add Today's Goal</h3>
         <form onSubmit={handleQuickAdd}>
-          <div className="mobile-form-row">
-            <div style={{ flex: 2 }}>
+          <div className="form-row">
+            <div className="form-group" style={{ flex: 3 }}>
               <input
                 type="text"
                 placeholder="What do you want to accomplish today?"
                 value={quickAddTitle}
                 onChange={(e) => setQuickAddTitle(e.target.value)}
-                style={{
-                  fontSize: '16px',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: '2px solid #e1e5e9'
-                }}
+                style={{ width: '100%', padding: '12px' }}
               />
             </div>
-            <div style={{ minWidth: '100px' }}>
+            <div className="form-group" style={{ minWidth: '120px' }}>
               <select
                 value={quickAddPriority}
                 onChange={(e) => setQuickAddPriority(parseInt(e.target.value))}
                 style={{
-                  fontSize: '16px',
+                  width: '100%',
                   padding: '12px',
-                  borderRadius: '8px',
-                  border: '2px solid #e1e5e9',
                   backgroundColor: getPriorityInfo(quickAddPriority).color,
                   color: 'white',
                   fontWeight: 'bold'
@@ -255,38 +214,23 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                 <option value={3}>🟢 Low</option>
               </select>
             </div>
-            <div style={{ minWidth: '120px' }}>
+            <div className="form-group" style={{ minWidth: '150px' }}>
               <select
                 value={selectedMissionId}
                 onChange={(e) => setSelectedMissionId(e.target.value)}
-                style={{
-                  fontSize: '16px',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: '2px solid #e1e5e9'
-                }}
+                style={{ width: '100%', padding: '12px' }}
               >
                 <option value="">Select Mission</option>
                 {missions.filter(m => m.status === 'active').map(mission => (
-                  <option key={mission.id} value={mission.id}>
-                    {mission.title.length > 20 ? mission.title.substring(0, 20) + '...' : mission.title}
-                  </option>
+                  <option key={mission.id} value={mission.id}>{mission.title}</option>
                 ))}
               </select>
             </div>
             <button
               type="submit"
               disabled={!quickAddTitle.trim() || !selectedMissionId}
-              style={{
-                backgroundColor: (!quickAddTitle.trim() || !selectedMissionId) ? '#ccc' : '#28a745',
-                color: 'white',
-                border: 'none',
-                padding: '12px 16px',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '600',
-                minHeight: '48px'
-              }}
+              className="btn btn-success"
+              style={{ minWidth: '120px' }}
             >
               Add Goal
             </button>
@@ -294,24 +238,18 @@ const TodayDashboard = ({ missions, onRefresh }) => {
         </form>
       </div>
 
-      {/* Mobile Task Lists */}
-      <div className="mobile-two-column">
+      <div className="two-column">
         {/* Today's Pending Goals */}
         <div>
-          <div className="mobile-card">
-            <h3 style={{ 
-              margin: '0 0 16px 0', 
-              color: '#dc3545', 
-              fontSize: '18px',
-              fontWeight: '600'
-            }}>
+          <div className="card">
+            <h3 style={{ margin: '0 0 20px 0', color: '#dc3545', fontSize: '20px' }}>
               🎯 Focus Now ({todayMissions.length})
             </h3>
             
             {todayMissions.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#666', padding: '20px' }}>
-                <p style={{ fontSize: '16px', margin: '0 0 8px 0' }}>🎉 All caught up!</p>
-                <p style={{ margin: '0', fontSize: '14px' }}>No pending goals for today.</p>
+              <div className="text-center" style={{ padding: '40px', color: '#666' }}>
+                <p style={{ fontSize: '18px', margin: '0 0 10px 0' }}>🎉 All caught up!</p>
+                <p style={{ margin: '0' }}>No pending goals for today. Add some above!</p>
               </div>
             ) : (
               todayMissions.map(mission => {
@@ -321,40 +259,39 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                 return (
                   <div
                     key={mission.id}
-                    className="mobile-task"
+                    className="task-item"
                     style={{
                       backgroundColor: priorityInfo.bgColor,
                       borderLeftColor: priorityInfo.color,
                       ...(overdueInfo.urgency === 'critical' ? { animation: 'pulse 2s infinite' } : {})
                     }}
                   >
-                    <div className="mobile-task-header">
+                    <div className="task-header">
                       <input
                         type="checkbox"
                         checked={false}
                         onChange={() => handleToggleComplete(mission)}
-                        style={{ margin: '2px 0 0 0' }}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                       />
                       <span style={{ fontSize: '18px' }}>{priorityInfo.icon}</span>
-                      <div className="mobile-task-content">
-                        <div style={{ marginBottom: '8px' }}>
-                          {overdueInfo.isOverdue && (
-                            <span className="mobile-badge" style={{
+                      <div className="task-content">
+                        {overdueInfo.isOverdue && (
+                          <div style={{ marginBottom: '8px' }}>
+                            <span className="badge" style={{
                               backgroundColor: overdueInfo.urgency === 'critical' ? '#dc2626' : '#f59e0b',
-                              color: 'white',
-                              marginRight: '6px'
+                              color: 'white'
                             }}>
                               {overdueInfo.urgency === 'critical' ? '🚨 OVERDUE' : '⚠️ LATE'}
                             </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
                         
-                        <h4 className="mobile-task-title">{mission.title}</h4>
+                        <h4 className="task-title">{mission.title}</h4>
                         
                         {overdueInfo.isOverdue && (
                           <p style={{ 
-                            margin: '4px 0 8px 0', 
-                            fontSize: '12px', 
+                            margin: '8px 0', 
+                            fontSize: '13px', 
                             color: overdueInfo.urgency === 'critical' ? '#dc2626' : '#f59e0b',
                             fontWeight: 'bold'
                           }}>
@@ -365,14 +302,14 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                           </p>
                         )}
                         
-                        <div className="mobile-task-meta">
-                          <span className="mobile-badge" style={{ 
+                        <div className="task-meta">
+                          <span className="badge" style={{ 
                             backgroundColor: priorityInfo.color,
                             color: 'white'
                           }}>
                             {priorityInfo.label}
                           </span>
-                          <span className="mobile-badge" style={{ 
+                          <span className="badge" style={{ 
                             backgroundColor: '#e3f2fd',
                             color: '#666'
                           }}>
@@ -380,7 +317,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                           </span>
                           {mission.due_date && (
                             <span style={{ 
-                              fontSize: '11px', 
+                              fontSize: '12px', 
                               color: overdueInfo.isOverdue ? '#dc2626' : '#666' 
                             }}>
                               {overdueInfo.isOverdue 
@@ -401,19 +338,14 @@ const TodayDashboard = ({ missions, onRefresh }) => {
 
         {/* Today's Completed Goals */}
         <div>
-          <div className="mobile-card">
-            <h3 style={{ 
-              margin: '0 0 16px 0', 
-              color: '#28a745', 
-              fontSize: '18px',
-              fontWeight: '600'
-            }}>
+          <div className="card">
+            <h3 style={{ margin: '0 0 20px 0', color: '#28a745', fontSize: '20px' }}>
               ✅ Completed Today ({completedToday.length})
             </h3>
             
             {completedToday.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#666', padding: '20px' }}>
-                <p style={{ margin: '0', fontSize: '14px' }}>No goals completed yet today. You got this! 💪</p>
+              <div className="text-center" style={{ padding: '40px', color: '#666' }}>
+                <p style={{ margin: '0' }}>No goals completed yet today. You got this! 💪</p>
               </div>
             ) : (
               completedToday.map(mission => {
@@ -422,42 +354,42 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                 return (
                   <div
                     key={mission.id}
-                    className="mobile-task"
+                    className="task-item"
                     style={{
                       backgroundColor: '#f0fff4',
                       borderLeftColor: priorityInfo.color,
                       opacity: '0.9'
                     }}
                   >
-                    <div className="mobile-task-header">
+                    <div className="task-header">
                       <input
                         type="checkbox"
                         checked={true}
                         onChange={() => handleToggleComplete(mission)}
-                        style={{ margin: '2px 0 0 0' }}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                       />
                       <span style={{ fontSize: '18px' }}>{priorityInfo.icon}</span>
-                      <div className="mobile-task-content">
-                        <h4 className="mobile-task-title" style={{ 
+                      <div className="task-content">
+                        <h4 className="task-title" style={{ 
                           textDecoration: 'line-through',
                           color: '#666'
                         }}>
                           {mission.title}
                         </h4>
-                        <div className="mobile-task-meta">
-                          <span className="mobile-badge" style={{ 
+                        <div className="task-meta">
+                          <span className="badge" style={{ 
                             backgroundColor: priorityInfo.color,
                             color: 'white'
                           }}>
                             {priorityInfo.label}
                           </span>
-                          <span className="mobile-badge" style={{ 
+                          <span className="badge" style={{ 
                             backgroundColor: '#e3f2fd',
                             color: '#666'
                           }}>
                             📋 {mission.mission_title}
                           </span>
-                          <span style={{ fontSize: '11px', color: '#28a745' }}>
+                          <span style={{ fontSize: '12px', color: '#28a745' }}>
                             ✅ {mission.completed_at ? new Date(mission.completed_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Completed'}
                           </span>
                         </div>
