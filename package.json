@@ -1,18 +1,12 @@
 {
-  "name": "mission-tracker-fullstack",
+  "name": "mission-tracker",
   "version": "1.0.0",
-  "description": "Mission Tracker - Multi-user Task Management App",
-  "main": "backend/server.js",
+  "description": "Multi-user task management app",
   "scripts": {
-    "start": "node backend/server.js",
-    "build": "cd frontend && npm install && npm run build",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
-    "postinstall": "cd backend && npm install && cd frontend && npm install"
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "cd backend && node server.js"
   },
   "engines": {
     "node": "18.x"
-  },
-  "dependencies": {
-    "concurrently": "^7.6.0"
   }
 }
