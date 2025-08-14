@@ -162,44 +162,80 @@ function App() {
   // Show loading screen while data is loading
   if (loading) {
     return (
-      <div className="app-container">
+      <div className="app">
         <div className="loading">
-          <div style={{ textAlign: 'center' }}>
-            <h2 style={{ color: '#333', margin: '0 0 10px 0' }}>🎯 Mission Tracker</h2>
-            <p style={{ color: '#666', margin: '0' }}>Loading your missions...</p>
-          </div>
+          <div className="spinner"></div>
+          <h2 className="text-2xl font-semibold" style={{ color: 'var(--gray-800)' }}>🎯 Mission Tracker</h2>
+          <p style={{ color: 'var(--gray-600)' }}>Loading your productivity dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="app-container">
-      {/* Desktop Header */}
+    <div className="app">
+      {/* Modern Header */}
       <div className="header">
-        <h1>🎯 Mission Tracker</h1>
-        <div className="header-user">
-          <span>Welcome, <strong>{currentUser}</strong>!</span>
-          <button onClick={handleLogout}>
-            Logout
-          </button>
+        <div className="header-content">
+          <div className="logo">
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              background: 'linear-gradient(135deg, var(--primary-500), var(--primary-600))',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.25rem'
+            }}>
+              🎯
+            </div>
+            <h1>Mission Tracker</h1>
+          </div>
+          
+          <div className="user-menu">
+            <div className="user-info">
+              <div className="user-avatar">
+                {currentUser.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div className="font-medium text-sm">Welcome back,</div>
+                <div className="font-semibold" style={{ color: 'var(--gray-900)' }}>
+                  {currentUser.charAt(0).toUpperCase() + currentUser.slice(1)}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="btn"
+              style={{ 
+                background: 'var(--gray-100)',
+                color: 'var(--gray-700)',
+                border: '1px solid var(--gray-200)'
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="main-content">
-        {/* Desktop Navigation */}
-        <div className="navigation">
+      <div className="main-container">
+        {/* Modern Navigation */}
+        <div className="nav-tabs">
           <button
             onClick={() => setCurrentView('today')}
-            className={`nav-button ${currentView === 'today' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'today' ? 'active' : ''}`}
           >
-            🎯 Today's Focus
+            <span>🎯</span>
+            Today's Focus
           </button>
           <button
             onClick={() => setCurrentView('missions')}
-            className={`nav-button ${currentView === 'missions' ? 'active' : ''}`}
+            className={`nav-tab ${currentView === 'missions' ? 'active' : ''}`}
           >
-            📋 Manage Missions
+            <span>📋</span>
+            Mission Management
           </button>
         </div>
 
@@ -207,97 +243,112 @@ function App() {
           <TodayDashboard missions={missions} onRefresh={refreshData} />
         ) : (
           <>
-            <div className="card text-center">
-              <h1 style={{ color: '#333', margin: '0 0 10px 0', fontSize: '28px' }}>
-                📋 Mission Management
-              </h1>
-              <p style={{ color: '#666', margin: '0', fontSize: '16px' }}>
-                Organize your long-term goals and create daily missions
-              </p>
+            <div className="card text-center mb-8">
+              <div className="card-content">
+                <h1 className="text-4xl font-bold" style={{ color: 'var(--gray-900)', marginBottom: 'var(--space-4)' }}>
+                  📋 Mission Management
+                </h1>
+                <p className="text-xl" style={{ color: 'var(--gray-600)' }}>
+                  Organize your long-term goals and break them into daily actionable missions
+                </p>
+              </div>
             </div>
             
-            <div className="two-column">
+            <div className="grid-2">
               <div>
                 <div className="card">
-                  <button
-                    onClick={() => {
-                      setShowMissionForm(!showMissionForm);
-                      setEditingMission(null);
-                    }}
-                    className="btn btn-primary btn-lg"
-                    style={{ marginBottom: '20px', width: '100%' }}
-                  >
-                    {showMissionForm ? 'Cancel' : '+ New Mission'}
-                  </button>
-
-                  {showMissionForm && (
-                    <MissionForm
-                      onSubmit={editingMission ? handleUpdateMission : handleCreateMission}
-                      mission={editingMission}
-                      onCancel={() => {
-                        setShowMissionForm(false);
+                  <div className="card-header">
+                    <h3 className="card-title">Your Missions</h3>
+                    <button
+                      onClick={() => {
+                        setShowMissionForm(!showMissionForm);
                         setEditingMission(null);
                       }}
-                    />
-                  )}
+                      className="btn btn-primary"
+                    >
+                      {showMissionForm ? 'Cancel' : '+ New Mission'}
+                    </button>
+                  </div>
+                  <div className="card-content">
+                    {showMissionForm && (
+                      <div className="mb-6">
+                        <MissionForm
+                          onSubmit={editingMission ? handleUpdateMission : handleCreateMission}
+                          mission={editingMission}
+                          onCancel={() => {
+                            setShowMissionForm(false);
+                            setEditingMission(null);
+                          }}
+                        />
+                      </div>
+                    )}
 
-                  <MissionList
-                    missions={missions}
-                    selectedMissionId={selectedMissionId}
-                    onSelectMission={setSelectedMissionId}
-                    onEdit={(mission) => {
-                      setEditingMission(mission);
-                      setShowMissionForm(true);
-                    }}
-                    onDelete={handleDeleteMission}
-                  />
+                    <MissionList
+                      missions={missions}
+                      selectedMissionId={selectedMissionId}
+                      onSelectMission={setSelectedMissionId}
+                      onEdit={(mission) => {
+                        setEditingMission(mission);
+                        setShowMissionForm(true);
+                      }}
+                      onDelete={handleDeleteMission}
+                    />
+                  </div>
                 </div>
               </div>
 
               <div>
                 {selectedMissionId ? (
                   <div className="card">
-                    <button
-                      onClick={() => {
-                        setShowDailyMissionForm(!showDailyMissionForm);
-                        setEditingDailyMission(null);
-                      }}
-                      className="btn btn-success btn-lg"
-                      style={{ marginBottom: '20px', width: '100%' }}
-                    >
-                      {showDailyMissionForm ? 'Cancel' : '+ New Daily Mission'}
-                    </button>
-
-                    {showDailyMissionForm && (
-                      <DailyMissionForm
-                        onSubmit={editingDailyMission ? handleUpdateDailyMission : handleCreateDailyMission}
-                        dailyMission={editingDailyMission}
-                        missionId={selectedMissionId}
-                        onCancel={() => {
-                          setShowDailyMissionForm(false);
+                    <div className="card-header">
+                      <h3 className="card-title">Daily Missions</h3>
+                      <button
+                        onClick={() => {
+                          setShowDailyMissionForm(!showDailyMissionForm);
                           setEditingDailyMission(null);
                         }}
-                      />
-                    )}
+                        className="btn btn-success"
+                      >
+                        {showDailyMissionForm ? 'Cancel' : '+ New Daily Mission'}
+                      </button>
+                    </div>
+                    <div className="card-content">
+                      {showDailyMissionForm && (
+                        <div className="mb-6">
+                          <DailyMissionForm
+                            onSubmit={editingDailyMission ? handleUpdateDailyMission : handleCreateDailyMission}
+                            dailyMission={editingDailyMission}
+                            missionId={selectedMissionId}
+                            onCancel={() => {
+                              setShowDailyMissionForm(false);
+                              setEditingDailyMission(null);
+                            }}
+                          />
+                        </div>
+                      )}
 
-                    <DailyMissionList
-                      dailyMissions={dailyMissions}
-                      onEdit={(dailyMission) => {
-                        setEditingDailyMission(dailyMission);
-                        setShowDailyMissionForm(true);
-                      }}
-                      onDelete={handleDeleteDailyMission}
-                      onToggleComplete={handleToggleComplete}
-                    />
+                      <DailyMissionList
+                        dailyMissions={dailyMissions}
+                        onEdit={(dailyMission) => {
+                          setEditingDailyMission(dailyMission);
+                          setShowDailyMissionForm(true);
+                        }}
+                        onDelete={handleDeleteDailyMission}
+                        onToggleComplete={handleToggleComplete}
+                      />
+                    </div>
                   </div>
                 ) : (
-                  <div className="card text-center">
-                    <h3 style={{ color: '#666', margin: '0 0 10px 0' }}>
-                      Select a mission to manage daily missions
-                    </h3>
-                    <p style={{ color: '#999', margin: '0' }}>
-                      Click on a mission from the left panel to start managing daily missions.
-                    </p>
+                  <div className="card">
+                    <div className="card-content text-center" style={{ padding: 'var(--space-12)' }}>
+                      <div style={{ fontSize: '4rem', marginBottom: 'var(--space-6)', opacity: '0.5' }}>📋</div>
+                      <h3 className="text-2xl font-semibold mb-4" style={{ color: 'var(--gray-600)' }}>
+                        Select a mission to manage daily tasks
+                      </h3>
+                      <p style={{ color: 'var(--gray-500)', fontSize: '1.125rem' }}>
+                        Choose a mission from the left panel to start creating and managing daily actionable tasks.
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>

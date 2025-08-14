@@ -96,10 +96,10 @@ const TodayDashboard = ({ missions, onRefresh }) => {
 
   const getPriorityInfo = (priority) => {
     switch (priority) {
-      case 1: return { color: '#dc3545', icon: '🔴', label: 'High', bgColor: '#fff5f5', borderColor: '#fecaca' };
-      case 2: return { color: '#ffc107', icon: '🟡', label: 'Medium', bgColor: '#fffbeb', borderColor: '#fed7aa' };
-      case 3: return { color: '#28a745', icon: '🟢', label: 'Low', bgColor: '#f0fff4', borderColor: '#bbf7d0' };
-      default: return { color: '#6c757d', icon: '⚪', label: 'None', bgColor: '#f8f9fa', borderColor: '#e9ecef' };
+      case 1: return { color: 'var(--danger-500)', icon: '🔴', label: 'High', class: 'priority-high' };
+      case 2: return { color: 'var(--warning-500)', icon: '🟡', label: 'Medium', class: 'priority-medium' };
+      case 3: return { color: 'var(--success-500)', icon: '🟢', label: 'Low', class: 'priority-low' };
+      default: return { color: 'var(--gray-400)', icon: '⚪', label: 'None', class: 'priority-none' };
     }
   };
 
@@ -146,7 +146,8 @@ const TodayDashboard = ({ missions, onRefresh }) => {
   if (loading) {
     return (
       <div className="loading">
-        <p>Loading today's goals...</p>
+        <div className="spinner"></div>
+        <p className="text-gray-600">Loading your daily focus...</p>
       </div>
     );
   }
@@ -155,249 +156,258 @@ const TodayDashboard = ({ missions, onRefresh }) => {
 
   return (
     <div className="fade-in">
-      {/* Desktop Header */}
-      <div className="today-header">
-        <h1>🎯 Today's Focus</h1>
-        <p>{getTodayDate()}</p>
+      {/* Hero Section */}
+      <div className="today-hero slide-in-up">
+        <div className="today-title">🎯 Today's Focus</div>
+        <div className="today-subtitle">{getTodayDate()}</div>
         
-        <div className="progress-bar">
+        <div className="progress-container">
           <div 
-            className="progress-fill" 
+            className="progress-bar" 
             style={{ width: `${getProgressPercentage()}%` }}
           ></div>
         </div>
         
-        <div className="stats">
-          <span>🔴 {priorityStats.high} High</span>
-          <span>🟡 {priorityStats.medium} Medium</span>
-          <span>🟢 {priorityStats.low} Low</span>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <div className="stat-value">🔴 {priorityStats.high}</div>
+            <div className="stat-label">High Priority</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">🟡 {priorityStats.medium}</div>
+            <div className="stat-label">Medium Priority</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-value">🟢 {priorityStats.low}</div>
+            <div className="stat-label">Low Priority</div>
+          </div>
           {priorityStats.overdue > 0 && (
-            <span className="pulse" style={{ fontWeight: 'bold' }}>
-              {priorityStats.critical > 0 ? '🚨' : '⚠️'} {priorityStats.overdue} Overdue
-            </span>
+            <div className="stat-item pulse">
+              <div className="stat-value">
+                {priorityStats.critical > 0 ? '🚨' : '⚠️'} {priorityStats.overdue}
+              </div>
+              <div className="stat-label">Overdue Tasks</div>
+            </div>
           )}
         </div>
         
-        <p style={{ fontSize: '16px', opacity: '0.9', margin: '10px 0 0 0' }}>
-          {completedToday.length} completed • {todayMissions.length} remaining • {getProgressPercentage()}% done
+        <p style={{ fontSize: '1.125rem', opacity: '0.9', margin: '0' }}>
+          <strong>{completedToday.length}</strong> completed • <strong>{todayMissions.length}</strong> remaining • <strong>{getProgressPercentage()}%</strong> done
         </p>
       </div>
 
       {/* Quick Add Form */}
-      <div className="card">
-        <h3 style={{ margin: '0 0 20px 0', fontSize: '20px' }}>⚡ Quick Add Today's Goal</h3>
-        <form onSubmit={handleQuickAdd}>
-          <div className="form-row">
-            <div className="form-group" style={{ flex: 3 }}>
-              <input
-                type="text"
-                placeholder="What do you want to accomplish today?"
-                value={quickAddTitle}
-                onChange={(e) => setQuickAddTitle(e.target.value)}
-                style={{ width: '100%', padding: '12px' }}
-              />
-            </div>
-            <div className="form-group" style={{ minWidth: '120px' }}>
-              <select
-                value={quickAddPriority}
-                onChange={(e) => setQuickAddPriority(parseInt(e.target.value))}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  backgroundColor: getPriorityInfo(quickAddPriority).color,
-                  color: 'white',
-                  fontWeight: 'bold'
-                }}
+      <div className="card mb-8">
+        <div className="card-header">
+          <h3 className="card-title">⚡ Quick Add Today's Goal</h3>
+        </div>
+        <div className="card-content">
+          <form onSubmit={handleQuickAdd}>
+            <div className="grid-form">
+              <div className="form-group mb-0">
+                <input
+                  type="text"
+                  placeholder="What do you want to accomplish today?"
+                  value={quickAddTitle}
+                  onChange={(e) => setQuickAddTitle(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+              <div className="form-group mb-0">
+                <select
+                  value={quickAddPriority}
+                  onChange={(e) => setQuickAddPriority(parseInt(e.target.value))}
+                  className="form-select"
+                  style={{ background: getPriorityInfo(quickAddPriority).color, color: 'white', fontWeight: '600' }}
+                >
+                  <option value={1}>🔴 High</option>
+                  <option value={2}>🟡 Medium</option>
+                  <option value={3}>🟢 Low</option>
+                </select>
+              </div>
+              <div className="form-group mb-0">
+                <select
+                  value={selectedMissionId}
+                  onChange={(e) => setSelectedMissionId(e.target.value)}
+                  className="form-select"
+                >
+                  <option value="">Select Mission</option>
+                  {missions.filter(m => m.status === 'active').map(mission => (
+                    <option key={mission.id} value={mission.id}>{mission.title}</option>
+                  ))}
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={!quickAddTitle.trim() || !selectedMissionId}
+                className="btn btn-success"
               >
-                <option value={1}>🔴 High</option>
-                <option value={2}>🟡 Medium</option>
-                <option value={3}>🟢 Low</option>
-              </select>
+                Add Goal
+              </button>
             </div>
-            <div className="form-group" style={{ minWidth: '150px' }}>
-              <select
-                value={selectedMissionId}
-                onChange={(e) => setSelectedMissionId(e.target.value)}
-                style={{ width: '100%', padding: '12px' }}
-              >
-                <option value="">Select Mission</option>
-                {missions.filter(m => m.status === 'active').map(mission => (
-                  <option key={mission.id} value={mission.id}>{mission.title}</option>
-                ))}
-              </select>
-            </div>
-            <button
-              type="submit"
-              disabled={!quickAddTitle.trim() || !selectedMissionId}
-              className="btn btn-success"
-              style={{ minWidth: '120px' }}
-            >
-              Add Goal
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
 
-      <div className="two-column">
+      <div className="grid-2">
         {/* Today's Pending Goals */}
-        <div>
-          <div className="card">
-            <h3 style={{ margin: '0 0 20px 0', color: '#dc3545', fontSize: '20px' }}>
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title" style={{ color: 'var(--danger-600)' }}>
               🎯 Focus Now ({todayMissions.length})
             </h3>
-            
+          </div>
+          <div className="card-content">
             {todayMissions.length === 0 ? (
-              <div className="text-center" style={{ padding: '40px', color: '#666' }}>
-                <p style={{ fontSize: '18px', margin: '0 0 10px 0' }}>🎉 All caught up!</p>
-                <p style={{ margin: '0' }}>No pending goals for today. Add some above!</p>
+              <div className="text-center" style={{ padding: 'var(--space-12)', color: 'var(--gray-500)' }}>
+                <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>🎉</div>
+                <h4 className="text-xl font-semibold mb-2">All caught up!</h4>
+                <p>No pending goals for today. Add some above to get started!</p>
               </div>
             ) : (
-              todayMissions.map(mission => {
-                const priorityInfo = getPriorityInfo(mission.priority);
-                const overdueInfo = getOverdueInfo(mission);
-                
-                return (
-                  <div
-                    key={mission.id}
-                    className="task-item"
-                    style={{
-                      backgroundColor: priorityInfo.bgColor,
-                      borderLeftColor: priorityInfo.color,
-                      ...(overdueInfo.urgency === 'critical' ? { animation: 'pulse 2s infinite' } : {})
-                    }}
-                  >
-                    <div className="task-header">
-                      <input
-                        type="checkbox"
-                        checked={false}
-                        onChange={() => handleToggleComplete(mission)}
-                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                      />
-                      <span style={{ fontSize: '18px' }}>{priorityInfo.icon}</span>
-                      <div className="task-content">
-                        {overdueInfo.isOverdue && (
-                          <div style={{ marginBottom: '8px' }}>
-                            <span className="badge" style={{
-                              backgroundColor: overdueInfo.urgency === 'critical' ? '#dc2626' : '#f59e0b',
-                              color: 'white'
-                            }}>
-                              {overdueInfo.urgency === 'critical' ? '🚨 OVERDUE' : '⚠️ LATE'}
-                            </span>
-                          </div>
-                        )}
-                        
-                        <h4 className="task-title">{mission.title}</h4>
-                        
-                        {overdueInfo.isOverdue && (
-                          <p style={{ 
-                            margin: '8px 0', 
-                            fontSize: '13px', 
-                            color: overdueInfo.urgency === 'critical' ? '#dc2626' : '#f59e0b',
-                            fontWeight: 'bold'
-                          }}>
-                            {overdueInfo.daysLate === 1 
-                              ? '📅 This was due yesterday!'
-                              : `📅 This was due ${overdueInfo.daysLate} days ago!`
-                            }
-                          </p>
-                        )}
-                        
-                        <div className="task-meta">
-                          <span className="badge" style={{ 
-                            backgroundColor: priorityInfo.color,
-                            color: 'white'
-                          }}>
-                            {priorityInfo.label}
-                          </span>
-                          <span className="badge" style={{ 
-                            backgroundColor: '#e3f2fd',
-                            color: '#666'
-                          }}>
-                            📋 {mission.mission_title}
-                          </span>
-                          {mission.due_date && (
-                            <span style={{ 
-                              fontSize: '12px', 
-                              color: overdueInfo.isOverdue ? '#dc2626' : '#666' 
-                            }}>
-                              {overdueInfo.isOverdue 
-                                ? `⚠️ Was due: ${new Date(mission.due_date).toLocaleDateString()}`
-                                : '📅 Due today'
-                              }
-                            </span>
+              <div className="task-list">
+                {todayMissions.map(mission => {
+                  const priorityInfo = getPriorityInfo(mission.priority);
+                  const overdueInfo = getOverdueInfo(mission);
+                  
+                  return (
+                    <div
+                      key={mission.id}
+                      className={`task-item ${priorityInfo.class} ${overdueInfo.urgency === 'critical' ? 'pulse' : ''}`}
+                    >
+                      <div className="task-header">
+                        <input
+                          type="checkbox"
+                          checked={false}
+                          onChange={() => handleToggleComplete(mission)}
+                          className="task-checkbox"
+                        />
+                        <span style={{ fontSize: '1.25rem' }}>{priorityInfo.icon}</span>
+                        <div className="task-content">
+                          {overdueInfo.isOverdue && (
+                            <div style={{ marginBottom: 'var(--space-2)' }}>
+                              <span className="badge badge-overdue">
+                                {overdueInfo.urgency === 'critical' ? '🚨 CRITICAL OVERDUE' : '⚠️ OVERDUE'}
+                              </span>
+                            </div>
                           )}
+                          
+                          <h4 className="task-title">{mission.title}</h4>
+                          
+                          {overdueInfo.isOverdue && (
+                            <p style={{ 
+                              margin: 'var(--space-2) 0', 
+                              fontSize: '0.875rem', 
+                              color: 'var(--danger-600)',
+                              fontWeight: '600'
+                            }}>
+                              {overdueInfo.daysLate === 1 
+                                ? '📅 This was due yesterday!'
+                                : `📅 This was due ${overdueInfo.daysLate} days ago!`
+                              }
+                            </p>
+                          )}
+                          
+                          <div className="task-meta">
+                            <span className={`badge badge-${priorityInfo.label.toLowerCase()}`}>
+                              {priorityInfo.icon} {priorityInfo.label}
+                            </span>
+                            <span className="badge" style={{ 
+                              background: 'var(--primary-50)',
+                              color: 'var(--primary-700)',
+                              border: '1px solid var(--primary-200)'
+                            }}>
+                              📋 {mission.mission_title}
+                            </span>
+                            {mission.due_date && (
+                              <span style={{ 
+                                fontSize: '0.75rem', 
+                                color: overdueInfo.isOverdue ? 'var(--danger-600)' : 'var(--gray-500)',
+                                fontWeight: overdueInfo.isOverdue ? '600' : 'normal'
+                              }}>
+                                {overdueInfo.isOverdue 
+                                  ? `⚠️ Was due: ${new Date(mission.due_date).toLocaleDateString()}`
+                                  : '📅 Due today'
+                                }
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             )}
           </div>
         </div>
 
         {/* Today's Completed Goals */}
-        <div>
-          <div className="card">
-            <h3 style={{ margin: '0 0 20px 0', color: '#28a745', fontSize: '20px' }}>
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title" style={{ color: 'var(--success-600)' }}>
               ✅ Completed Today ({completedToday.length})
             </h3>
-            
+          </div>
+          <div className="card-content">
             {completedToday.length === 0 ? (
-              <div className="text-center" style={{ padding: '40px', color: '#666' }}>
-                <p style={{ margin: '0' }}>No goals completed yet today. You got this! 💪</p>
+              <div className="text-center" style={{ padding: 'var(--space-12)', color: 'var(--gray-500)' }}>
+                <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>💪</div>
+                <h4 className="text-xl font-semibold mb-2">Ready to achieve?</h4>
+                <p>No goals completed yet today. You got this!</p>
               </div>
             ) : (
-              completedToday.map(mission => {
-                const priorityInfo = getPriorityInfo(mission.priority);
-                
-                return (
-                  <div
-                    key={mission.id}
-                    className="task-item"
-                    style={{
-                      backgroundColor: '#f0fff4',
-                      borderLeftColor: priorityInfo.color,
-                      opacity: '0.9'
-                    }}
-                  >
-                    <div className="task-header">
-                      <input
-                        type="checkbox"
-                        checked={true}
-                        onChange={() => handleToggleComplete(mission)}
-                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                      />
-                      <span style={{ fontSize: '18px' }}>{priorityInfo.icon}</span>
-                      <div className="task-content">
-                        <h4 className="task-title" style={{ 
-                          textDecoration: 'line-through',
-                          color: '#666'
-                        }}>
-                          {mission.title}
-                        </h4>
-                        <div className="task-meta">
-                          <span className="badge" style={{ 
-                            backgroundColor: priorityInfo.color,
-                            color: 'white'
+              <div className="task-list">
+                {completedToday.map(mission => {
+                  const priorityInfo = getPriorityInfo(mission.priority);
+                  
+                  return (
+                    <div
+                      key={mission.id}
+                      className="task-item"
+                      style={{ opacity: '0.9', background: 'var(--success-50)' }}
+                    >
+                      <div className="task-header">
+                        <input
+                          type="checkbox"
+                          checked={true}
+                          onChange={() => handleToggleComplete(mission)}
+                          className="task-checkbox"
+                          style={{ background: 'var(--success-500)', borderColor: 'var(--success-500)' }}
+                        />
+                        <span style={{ fontSize: '1.25rem' }}>{priorityInfo.icon}</span>
+                        <div className="task-content">
+                          <h4 className="task-title" style={{ 
+                            textDecoration: 'line-through',
+                            color: 'var(--gray-600)'
                           }}>
-                            {priorityInfo.label}
-                          </span>
-                          <span className="badge" style={{ 
-                            backgroundColor: '#e3f2fd',
-                            color: '#666'
-                          }}>
-                            📋 {mission.mission_title}
-                          </span>
-                          <span style={{ fontSize: '12px', color: '#28a745' }}>
-                            ✅ {mission.completed_at ? new Date(mission.completed_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Completed'}
-                          </span>
+                            {mission.title}
+                          </h4>
+                          <div className="task-meta">
+                            <span className={`badge badge-${priorityInfo.label.toLowerCase()}`}>
+                              {priorityInfo.icon} {priorityInfo.label}
+                            </span>
+                            <span className="badge" style={{ 
+                              background: 'var(--primary-50)',
+                              color: 'var(--primary-700)',
+                              border: '1px solid var(--primary-200)'
+                            }}>
+                              📋 {mission.mission_title}
+                            </span>
+                            <span className="badge" style={{
+                              background: 'var(--success-100)',
+                              color: 'var(--success-700)',
+                              border: '1px solid var(--success-300)'
+                            }}>
+                              ✅ {mission.completed_at ? new Date(mission.completed_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Completed'}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             )}
           </div>
         </div>
