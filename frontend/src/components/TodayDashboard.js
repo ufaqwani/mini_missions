@@ -18,12 +18,12 @@ const TodayDashboard = ({ missions, onRefresh }) => {
       setLoading(true);
       
       const [todayResponse, completedResponse] = await Promise.all([
-        fetch('/api/today', {
+        fetch(process.env.NODE_ENV === 'production' ? '/api/today' : 'http://localhost:5000/api/today', {
           headers: {
             'x-current-user': localStorage.getItem('currentUser')
           }
         }),
-        fetch('/api/today/completed', {
+        fetch(process.env.NODE_ENV === 'production' ? '/api/today/completed' : 'http://localhost:5000/api/today/completed', {
           headers: {
             'x-current-user': localStorage.getItem('currentUser')
           }
@@ -51,7 +51,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
     if (!quickAddTitle.trim() || !selectedMissionId) return;
 
     try {
-      const response = await fetch('/api/today/quick-add', {
+      const response = await fetch(process.env.NODE_ENV === 'production' ? '/api/today/quick-add' : 'http://localhost:5000/api/today/quick-add', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
