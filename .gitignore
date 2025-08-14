@@ -1,0 +1,16 @@
+
+# Development scripts artifacts
+scripts/temp/
+*.log
+*.tmp
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

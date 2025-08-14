@@ -1,0 +1,17 @@
+{
+  "name": "mission-tracker",
+  "version": "1.0.0",
+  "description": "Multi-user task management app with priority-based daily focus",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "deploy": "./scripts/deployment/prepare-for-deployment.sh"
+  },
+  "keywords": ["task-management", "productivity", "react", "nodejs", "missions"],
+  "author": "Mission Tracker Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
