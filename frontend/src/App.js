@@ -67,12 +67,10 @@ function App() {
   }, [selectedMissionId, currentUser, loadDailyMissions]);
 
   const handleLogin = (username) => {
-    // SECURE: Only store username
     setCurrentUser(username);
     localStorage.setItem('currentUser', username);
   };
 
-  // ... (keep all other handler functions the same)
   const handleCreateMission = async (missionData) => {
     try {
       await missionAPI.create(missionData);
@@ -156,12 +154,10 @@ function App() {
     }
   };
 
-  // Show secure login screen if not authenticated
   if (!currentUser) {
     return <SimpleLogin onLogin={handleLogin} />;
   }
 
-  // Show loading screen
   if (loading) {
     return (
       <div className="app">
@@ -178,7 +174,7 @@ function App() {
 
   return (
     <div className="app">
-      {/* Professional Header */}
+      {/* FIXED: Use proper CSS classes for desktop header */}
       <div className="header">
         <div className="header-content">
           <div className="logo">
@@ -215,8 +211,9 @@ function App() {
         </div>
       </div>
 
+      {/* FIXED: Use proper CSS classes for desktop main container */}
       <div className="main-container">
-        {/* Navigation */}
+        {/* FIXED: Use proper CSS classes for desktop navigation */}
         <div className="nav-tabs">
           <button
             onClick={() => setCurrentView('today')}
@@ -257,6 +254,7 @@ function App() {
               </div>
             </div>
             
+            {/* FIXED: Use proper CSS classes for desktop two-column grid */}
             <div className="grid-2">
               <div>
                 <div className="card">

@@ -147,7 +147,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
     return (
       <div className="loading">
         <div className="spinner"></div>
-        <p className="text-gray-600">Loading your daily focus...</p>
+        <p style={{ color: 'var(--gray-600)' }}>Loading your daily focus...</p>
       </div>
     );
   }
@@ -156,8 +156,8 @@ const TodayDashboard = ({ missions, onRefresh }) => {
 
   return (
     <div className="fade-in">
-      {/* Hero Section */}
-      <div className="today-hero slide-in-up">
+      {/* FIXED: Use proper CSS classes for desktop hero */}
+      <div className="today-hero">
         <div className="today-title">🎯 Today's Focus</div>
         <div className="today-subtitle">{getTodayDate()}</div>
         
@@ -168,6 +168,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
           ></div>
         </div>
         
+        {/* FIXED: Use proper CSS classes for desktop stats grid */}
         <div className="stats-grid">
           <div className="stat-item">
             <div className="stat-value">🔴 {priorityStats.high}</div>
@@ -182,7 +183,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
             <div className="stat-label">Low Priority</div>
           </div>
           {priorityStats.overdue > 0 && (
-            <div className="stat-item pulse">
+            <div className="stat-item">
               <div className="stat-value">
                 {priorityStats.critical > 0 ? '🚨' : '⚠️'} {priorityStats.overdue}
               </div>
@@ -203,8 +204,9 @@ const TodayDashboard = ({ missions, onRefresh }) => {
         </div>
         <div className="card-content">
           <form onSubmit={handleQuickAdd}>
+            {/* FIXED: Use proper CSS classes for desktop form grid */}
             <div className="grid-form">
-              <div className="form-group mb-0">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <input
                   type="text"
                   placeholder="What do you want to accomplish today?"
@@ -213,7 +215,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                   className="form-input"
                 />
               </div>
-              <div className="form-group mb-0">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <select
                   value={quickAddPriority}
                   onChange={(e) => setQuickAddPriority(parseInt(e.target.value))}
@@ -225,7 +227,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                   <option value={3}>🟢 Low</option>
                 </select>
               </div>
-              <div className="form-group mb-0">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <select
                   value={selectedMissionId}
                   onChange={(e) => setSelectedMissionId(e.target.value)}
@@ -249,6 +251,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
         </div>
       </div>
 
+      {/* FIXED: Use proper CSS classes for desktop two-column grid */}
       <div className="grid-2">
         {/* Today's Pending Goals */}
         <div className="card">
@@ -261,7 +264,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
             {todayMissions.length === 0 ? (
               <div className="text-center" style={{ padding: 'var(--space-12)', color: 'var(--gray-500)' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>🎉</div>
-                <h4 className="text-xl font-semibold mb-2">All caught up!</h4>
+                <h4 className="text-xl font-semibold mb-4">All caught up!</h4>
                 <p>No pending goals for today. Add some above to get started!</p>
               </div>
             ) : (
@@ -273,7 +276,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                   return (
                     <div
                       key={mission.id}
-                      className={`task-item ${priorityInfo.class} ${overdueInfo.urgency === 'critical' ? 'pulse' : ''}`}
+                      className={`task-item ${priorityInfo.class}`}
                     >
                       <div className="task-header">
                         <input
@@ -286,7 +289,10 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                         <div className="task-content">
                           {overdueInfo.isOverdue && (
                             <div style={{ marginBottom: 'var(--space-2)' }}>
-                              <span className="badge badge-overdue">
+                              <span className="badge" style={{ 
+                                background: 'var(--danger-500)', 
+                                color: 'white' 
+                              }}>
                                 {overdueInfo.urgency === 'critical' ? '🚨 CRITICAL OVERDUE' : '⚠️ OVERDUE'}
                               </span>
                             </div>
@@ -353,7 +359,7 @@ const TodayDashboard = ({ missions, onRefresh }) => {
             {completedToday.length === 0 ? (
               <div className="text-center" style={{ padding: 'var(--space-12)', color: 'var(--gray-500)' }}>
                 <div style={{ fontSize: '3rem', marginBottom: 'var(--space-4)' }}>💪</div>
-                <h4 className="text-xl font-semibold mb-2">Ready to achieve?</h4>
+                <h4 className="text-xl font-semibold mb-4">Ready to achieve?</h4>
                 <p>No goals completed yet today. You got this!</p>
               </div>
             ) : (
@@ -373,7 +379,6 @@ const TodayDashboard = ({ missions, onRefresh }) => {
                           checked={true}
                           onChange={() => handleToggleComplete(mission)}
                           className="task-checkbox"
-                          style={{ background: 'var(--success-500)', borderColor: 'var(--success-500)' }}
                         />
                         <span style={{ fontSize: '1.25rem' }}>{priorityInfo.icon}</span>
                         <div className="task-content">
