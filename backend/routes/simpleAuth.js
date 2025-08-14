@@ -3,14 +3,15 @@ const { loginUser } = require('../middleware/simpleAuth');
 
 const router = express.Router();
 
-// Login endpoint
+// Secure login endpoint - NO password exposure
 router.post('/login', loginUser);
 
-// Get available users (for development)
-router.get('/users', (req, res) => {
+// Health check - NO sensitive data
+router.get('/health', (req, res) => {
   res.json({
-    users: ['ufaq', 'zia', 'sweta'],
-    message: 'Available users for login'
+    status: 'Authentication service active',
+    timestamp: new Date().toISOString()
+    // NO user list or password hints
   });
 });
 

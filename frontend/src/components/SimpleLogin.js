@@ -25,9 +25,10 @@ const SimpleLogin = ({ onLogin }) => {
       const data = await response.json();
 
       if (data.success) {
+        // SECURE: Only store username, never password
         onLogin(data.user.username);
       } else {
-        setError(data.error);
+        setError(data.error || 'Authentication failed');
       }
     } catch (error) {
       setError('Network error. Please try again.');
@@ -48,17 +49,20 @@ const SimpleLogin = ({ onLogin }) => {
       <div className="login-container">
         <div className="login-card fade-in">
           <div className="login-title">🎯 Mission Tracker</div>
-          <p className="login-subtitle">Sign in to access your productivity dashboard</p>
+          <p className="login-subtitle">
+            Professional productivity management platform
+          </p>
 
           {error && (
             <div style={{
-              background: 'var(--danger-50)',
-              color: 'var(--danger-700)',
-              padding: 'var(--space-3) var(--space-4)',
-              borderRadius: 'var(--radius-lg)',
-              marginBottom: 'var(--space-6)',
-              border: '1px solid var(--danger-200)',
-              fontSize: '0.875rem'
+              background: '#fef2f2',
+              color: '#dc2626',
+              padding: '1rem',
+              borderRadius: '0.75rem',
+              marginBottom: '1.5rem',
+              border: '1px solid #fecaca',
+              fontSize: '0.875rem',
+              fontWeight: '500'
             }}>
               {error}
             </div>
@@ -74,7 +78,7 @@ const SimpleLogin = ({ onLogin }) => {
                 onChange={handleChange}
                 required
                 className="form-input"
-                placeholder="Enter your username"
+                placeholder="Enter username"
                 autoComplete="username"
               />
             </div>
@@ -88,7 +92,7 @@ const SimpleLogin = ({ onLogin }) => {
                 onChange={handleChange}
                 required
                 className="form-input"
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 autoComplete="current-password"
               />
             </div>
@@ -96,12 +100,13 @@ const SimpleLogin = ({ onLogin }) => {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary btn-lg w-full mb-6"
+              className="btn btn-primary w-full"
+              style={{ marginBottom: '1.5rem' }}
             >
               {loading ? (
                 <>
                   <div className="spinner" style={{ width: '16px', height: '16px' }}></div>
-                  Signing In...
+                  Authenticating...
                 </>
               ) : (
                 'Sign In'
@@ -109,25 +114,18 @@ const SimpleLogin = ({ onLogin }) => {
             </button>
           </form>
 
+          {/* SECURE: NO password hints or credentials shown */}
           <div style={{ 
-            padding: 'var(--space-4)',
-            background: 'var(--gray-50)',
-            borderRadius: 'var(--radius-lg)',
+            padding: '1rem',
+            background: '#f9fafb',
+            borderRadius: '0.75rem',
             fontSize: '0.875rem',
-            color: 'var(--gray-600)'
+            color: '#6b7280'
           }}>
-            <div className="font-semibold mb-2">Available Demo Users:</div>
-            <div style={{ display: 'grid', gap: 'var(--space-1)' }}>
-              <code style={{ background: 'white', padding: 'var(--space-1) var(--space-2)', borderRadius: 'var(--radius)' }}>
-                ufaq / ufitufy
-              </code>
-              <code style={{ background: 'white', padding: 'var(--space-1) var(--space-2)', borderRadius: 'var(--radius)' }}>
-                zia / zeetv
-              </code>
-              <code style={{ background: 'white', padding: 'var(--space-1) var(--space-2)', borderRadius: 'var(--radius)' }}>
-                sweta / ss786
-              </code>
-            </div>
+            <div className="font-semibold mb-2">Demo Access Available</div>
+            <p style={{ margin: 0 }}>
+              Contact administrator for credentials or use demo account access.
+            </p>
           </div>
         </div>
       </div>

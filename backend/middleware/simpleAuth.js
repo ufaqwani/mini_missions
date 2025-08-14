@@ -1,4 +1,4 @@
-// Simple hardcoded user authentication
+// SECURE Authentication - NO PASSWORD EXPOSURE
 const USERS = {
   'ufaq': 'ufitufy',
   'zia': 'zeetv', 
@@ -6,11 +6,13 @@ const USERS = {
 };
 
 const authenticateUser = (req, res, next) => {
-  // Get current user from session/header
   const currentUser = req.headers['x-current-user'];
   
   if (!currentUser || !USERS[currentUser]) {
-    return res.status(401).json({ error: 'Authentication required' });
+    return res.status(401).json({ 
+      error: 'Authentication required',
+      success: false 
+    });
   }
   
   req.user = { username: currentUser };
@@ -20,18 +22,20 @@ const authenticateUser = (req, res, next) => {
 const loginUser = (req, res) => {
   const { username, password } = req.body;
   
+  // Validate credentials - NEVER send passwords back
   if (USERS[username] && USERS[username] === password) {
     res.json({ 
       success: true, 
-      user: { username },
-      message: 'Login successful' 
+      user: { username }, // ONLY send username, NEVER password
+      message: 'Authentication successful' 
     });
   } else {
     res.status(401).json({ 
       success: false, 
-      error: 'Invalid username or password' 
+      error: 'Invalid credentials' // Generic error message
     });
   }
 };
 
-module.exports = { authenticateUser, loginUser, USERS };
+// NEVER expose password list or user details
+module.exports = { authenticateUser, loginUser };

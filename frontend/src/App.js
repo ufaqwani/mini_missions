@@ -67,10 +67,12 @@ function App() {
   }, [selectedMissionId, currentUser, loadDailyMissions]);
 
   const handleLogin = (username) => {
+    // SECURE: Only store username
     setCurrentUser(username);
     localStorage.setItem('currentUser', username);
   };
 
+  // ... (keep all other handler functions the same)
   const handleCreateMission = async (missionData) => {
     try {
       await missionAPI.create(missionData);
@@ -154,19 +156,21 @@ function App() {
     }
   };
 
-  // Show login screen if not authenticated
+  // Show secure login screen if not authenticated
   if (!currentUser) {
     return <SimpleLogin onLogin={handleLogin} />;
   }
 
-  // Show loading screen while data is loading
+  // Show loading screen
   if (loading) {
     return (
       <div className="app">
         <div className="loading">
           <div className="spinner"></div>
-          <h2 className="text-2xl font-semibold" style={{ color: 'var(--gray-800)' }}>🎯 Mission Tracker</h2>
-          <p style={{ color: 'var(--gray-600)' }}>Loading your productivity dashboard...</p>
+          <h2 style={{ color: 'var(--gray-800)', fontSize: '1.5rem', fontWeight: '600' }}>
+            Mission Tracker
+          </h2>
+          <p style={{ color: 'var(--gray-600)' }}>Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -174,22 +178,11 @@ function App() {
 
   return (
     <div className="app">
-      {/* Modern Header */}
+      {/* Professional Header */}
       <div className="header">
         <div className="header-content">
           <div className="logo">
-            <div style={{ 
-              width: '40px', 
-              height: '40px', 
-              background: 'linear-gradient(135deg, var(--primary-500), var(--primary-600))',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '1.25rem'
-            }}>
-              🎯
-            </div>
+            <div className="logo-icon">🎯</div>
             <h1>Mission Tracker</h1>
           </div>
           
@@ -199,8 +192,10 @@ function App() {
                 {currentUser.charAt(0).toUpperCase()}
               </div>
               <div>
-                <div className="font-medium text-sm">Welcome back,</div>
-                <div className="font-semibold" style={{ color: 'var(--gray-900)' }}>
+                <div style={{ fontSize: '0.875rem', color: 'var(--gray-600)' }}>
+                  Welcome back
+                </div>
+                <div style={{ fontWeight: '600', color: 'var(--gray-900)' }}>
                   {currentUser.charAt(0).toUpperCase() + currentUser.slice(1)}
                 </div>
               </div>
@@ -221,7 +216,7 @@ function App() {
       </div>
 
       <div className="main-container">
-        {/* Modern Navigation */}
+        {/* Navigation */}
         <div className="nav-tabs">
           <button
             onClick={() => setCurrentView('today')}
@@ -245,11 +240,19 @@ function App() {
           <>
             <div className="card text-center mb-8">
               <div className="card-content">
-                <h1 className="text-4xl font-bold" style={{ color: 'var(--gray-900)', marginBottom: 'var(--space-4)' }}>
+                <h1 style={{ 
+                  fontSize: '2.5rem', 
+                  fontWeight: '800', 
+                  color: 'var(--gray-900)', 
+                  marginBottom: '1rem' 
+                }}>
                   📋 Mission Management
                 </h1>
-                <p className="text-xl" style={{ color: 'var(--gray-600)' }}>
-                  Organize your long-term goals and break them into daily actionable missions
+                <p style={{ 
+                  fontSize: '1.125rem', 
+                  color: 'var(--gray-600)' 
+                }}>
+                  Organize long-term goals and break them into actionable daily missions
                 </p>
               </div>
             </div>
@@ -271,7 +274,7 @@ function App() {
                   </div>
                   <div className="card-content">
                     {showMissionForm && (
-                      <div className="mb-6">
+                      <div style={{ marginBottom: '1.5rem' }}>
                         <MissionForm
                           onSubmit={editingMission ? handleUpdateMission : handleCreateMission}
                           mission={editingMission}
@@ -314,7 +317,7 @@ function App() {
                     </div>
                     <div className="card-content">
                       {showDailyMissionForm && (
-                        <div className="mb-6">
+                        <div style={{ marginBottom: '1.5rem' }}>
                           <DailyMissionForm
                             onSubmit={editingDailyMission ? handleUpdateDailyMission : handleCreateDailyMission}
                             dailyMission={editingDailyMission}
@@ -340,13 +343,20 @@ function App() {
                   </div>
                 ) : (
                   <div className="card">
-                    <div className="card-content text-center" style={{ padding: 'var(--space-12)' }}>
-                      <div style={{ fontSize: '4rem', marginBottom: 'var(--space-6)', opacity: '0.5' }}>📋</div>
-                      <h3 className="text-2xl font-semibold mb-4" style={{ color: 'var(--gray-600)' }}>
+                    <div className="card-content text-center" style={{ padding: '3rem' }}>
+                      <div style={{ fontSize: '4rem', marginBottom: '1.5rem', opacity: '0.5' }}>
+                        📋
+                      </div>
+                      <h3 style={{ 
+                        fontSize: '1.5rem', 
+                        fontWeight: '600', 
+                        marginBottom: '1rem',
+                        color: 'var(--gray-600)' 
+                      }}>
                         Select a mission to manage daily tasks
                       </h3>
                       <p style={{ color: 'var(--gray-500)', fontSize: '1.125rem' }}>
-                        Choose a mission from the left panel to start creating and managing daily actionable tasks.
+                        Choose a mission from the left panel to create and manage daily actionable tasks.
                       </p>
                     </div>
                   </div>
